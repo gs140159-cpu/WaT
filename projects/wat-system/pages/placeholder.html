@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WaT System</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-active-key="">
+  <div class="app">
+    <aside class="sidebar">
+      <a href="/index.html" class="sidebar-logo">
+        <div class="logo-circle">W</div>
+        <div class="logo-text">WaT<br>System</div>
+      </a>
+      <a id="order-create-btn" class="btn-order-create"
+         href="/pages/placeholder.html?key=order-create&title=発注する">📦 発注する</a>
+      <ul id="sidebar-nav" class="sidebar-nav"></ul>
+    </aside>
+
+    <div class="main">
+      <header class="header">
+        <div class="header-user">
+          <span>👤</span>
+          <span id="header-user-name">窪田貴宏 様</span>
+          <a class="pill-btn" href="/pages/placeholder.html?key=user-settings&title=ユーザー設定">ユーザー設定</a>
+          <a class="pill-btn pill-btn-dark" href="/pages/placeholder.html?key=logout&title=ログアウト">ログアウト</a>
+        </div>
+      </header>
+
+      <main class="content">
+        <h1 class="page-title" id="placeholder-title">-</h1>
+        <div class="placeholder-box">
+          <p>この画面は準備中です。</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/nav-data.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const key = params.get('key') || '';
+    const title = params.get('title') || 'ページ';
+    document.body.dataset.activeKey = key;
+    document.getElementById('placeholder-title').textContent = title;
+    document.title = `WaT System - ${title}`;
+  </script>
+</body>
+</html>

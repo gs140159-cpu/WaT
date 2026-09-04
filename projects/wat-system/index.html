@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WaT System - ホーム</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-active-key="">
+  <div class="app">
+    <aside class="sidebar">
+      <a href="/index.html" class="sidebar-logo">
+        <div class="logo-circle">W</div>
+        <div class="logo-text">WaT<br>System</div>
+      </a>
+      <a id="order-create-btn" class="btn-order-create"
+         href="/pages/placeholder.html?key=order-create&title=発注する">📦 発注する</a>
+      <ul id="sidebar-nav" class="sidebar-nav"></ul>
+    </aside>
+
+    <div class="main">
+      <header class="header">
+        <div class="header-user">
+          <span>👤</span>
+          <span id="header-user-name">窪田貴宏 様</span>
+          <a class="pill-btn" href="/pages/placeholder.html?key=user-settings&title=ユーザー設定">ユーザー設定</a>
+          <a class="pill-btn pill-btn-dark" href="/pages/placeholder.html?key=logout&title=ログアウト">ログアウト</a>
+        </div>
+      </header>
+
+      <main class="content">
+        <h1 class="page-title">ホーム</h1>
+
+        <section class="card-section">
+          <h2 class="section-title">管理する <span>📦</span></h2>
+          <div class="card-grid">
+            <a class="card" href="/pages/placeholder.html?key=unique-number&title=ユニーク番号">ユニーク番号</a>
+            <a class="card" href="/pages/placeholder.html?key=alert&title=アラート">アラート</a>
+            <a class="card" href="/pages/placeholder.html?key=delete-process&title=削除処理">削除処理</a>
+            <a class="card" href="/pages/placeholder.html?key=inventory-search&title=在庫検索">在庫検索</a>
+          </div>
+        </section>
+
+        <section class="card-section">
+          <h2 class="section-title">送る <span>🚚</span></h2>
+          <div class="card-grid">
+            <a class="card" href="/pages/placeholder.html?key=inventory-transfer&title=在庫移動">在庫移動</a>
+            <a class="card" href="/pages/placeholder.html?key=order-status&title=発注状況">発注状況</a>
+          </div>
+        </section>
+
+        <section class="card-section">
+          <h2 class="section-title">受け取る <span>🤝</span></h2>
+          <div class="card-grid">
+            <a class="card" href="/pages/placeholder.html?key=inventory-receive&title=在庫受取">在庫受取</a>
+            <a class="card" href="/pages/placeholder.html?key=inbound-process&title=入庫処理">入庫処理</a>
+            <a class="card" href="/pages/placeholder.html?key=return-receive&title=返却受入">返却受入</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/nav-data.js"></script>
+  <script src="/js/layout.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+const NAV_ITEMS = [
+  { key: 'order-history', label: '発注履歴' },
+  { key: 'usage-report', label: '使用報告' },
+  { key: 'login-info', label: 'ログイン情報' },
+  { key: 'facility-settings', label: '施設設定' },
+  { key: 'defect-report', label: '不具合報告' },
+  { key: 'excel-export', label: 'データ(Excel)出力' },
+  { key: 'data-entry', label: 'データ入力' },
+  { key: 'favorites', label: 'お気に入り' },
+  { key: 'bag-management', label: 'バッグ管理' },
+  { key: 'fixed-assets', label: '固定資産（レンタル品）管理' },
+  { key: 'constant-registration', label: '定数登録/修正' },
+  { key: 'alert-recipients', label: 'アラート配信先設定' },
+  { key: 'link-sharing', label: 'リンク共有' },
+  { key: 'master-management', label: 'マスタ管理' },
+];
