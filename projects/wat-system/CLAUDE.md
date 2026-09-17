@@ -26,7 +26,11 @@
   `href` を指定すると placeholder ではなくそのURLに直接遷移する。
 - `js/layout.js` — `nav-data.js` を元にサイドバーの `<ul id="sidebar-nav">` を描画し、
   現在ページ（`document.body.dataset.activeKey`）に応じてハイライトする。
-- `css/style.css` — 共通スタイル。
+  あわせて、ヘッダーにハンバーガーボタン（`.menu-toggle`）と `.sidebar-overlay` を
+  動的に挿入する（レスポンシブ対応。全ページ共通でここだけ変更すればよい）。
+- `css/style.css` — 共通スタイル。`@media (max-width: 768px)` でサイドバーを
+  オフキャンバスdrawer化（`body.sidebar-open` で表示）。スマホ幅での確認は
+  Playwrightで `viewport: { width: 390, height: 844 }` 相当を使う。
 - `docs/requirements/` — 機能要件定義書（Markdown）を保存する場所。
 
 ## 実行方法
