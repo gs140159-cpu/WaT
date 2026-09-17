@@ -14,10 +14,20 @@
   製品名/品番/アラートのみ表示）と、Excel出力相当の列を持つ一覧テーブルを持つ。
   データは `STOCK_ROWS`（ページ内にインラインで定義）のモックで、クライアント側
   JSでフィルタリングしている。滅菌期限が近い行は `row-alert` クラスで赤くハイライト。
-- `js/nav-data.js` — サイドバーメニュー項目の定義（`key` と `label`）。
+- `pages/usage-report.html` — 使用報告画面（実装済み）。サイドバーの「使用報告」
+  から遷移する。要件は `docs/requirements/usage-report-origin-facility.md` の
+  F-4/F-5/F-6（使用日・施設入力 → 製品入力方法選択 → リスト/スキャンで製品選択
+  → (同一ロットで最初の入庫施設が複数ある場合のみ)入庫先選択ボトムシート →
+  数量入力 → 確認 → 確定 → 完了、のウィザード形式）。
+  モックデータは `PRODUCT_STOCK`（ページ内にインライン定義）で、各製品が
+  `firstFacility`（最初の入庫施設。在庫移動があっても上書きされず引き継がれる
+  想定＝F-1/F-3）を持つ。確認画面の「入 庫 先：」行がF-6の新設項目（`NEW`バッジ付き）。
+- `js/nav-data.js` — サイドバーメニュー項目の定義（`key`、`label`、任意で`href`）。
+  `href` を指定すると placeholder ではなくそのURLに直接遷移する。
 - `js/layout.js` — `nav-data.js` を元にサイドバーの `<ul id="sidebar-nav">` を描画し、
   現在ページ（`document.body.dataset.activeKey`）に応じてハイライトする。
 - `css/style.css` — 共通スタイル。
+- `docs/requirements/` — 機能要件定義書（Markdown）を保存する場所。
 
 ## 実行方法
 

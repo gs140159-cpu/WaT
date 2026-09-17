@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const activeKey = document.body.dataset.activeKey || '';
 
   nav.innerHTML = NAV_ITEMS.map((item) => {
-    const href = `/pages/placeholder.html?key=${item.key}&title=${encodeURIComponent(item.label)}`;
+    const href = item.href || `/pages/placeholder.html?key=${item.key}&title=${encodeURIComponent(item.label)}`;
     const activeClass = item.key === activeKey ? ' active' : '';
     return `<li><a class="nav-link${activeClass}" href="${href}">${item.label}</a></li>`;
   }).join('');

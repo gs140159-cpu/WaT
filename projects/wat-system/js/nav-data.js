@@ -1,6 +1,6 @@
 const NAV_ITEMS = [
   { key: 'order-history', label: '発注履歴' },
-  { key: 'usage-report', label: '使用報告' },
+  { key: 'usage-report', label: '使用報告', href: '/pages/usage-report.html' },
   { key: 'login-info', label: 'ログイン情報' },
   { key: 'facility-settings', label: '施設設定' },
   { key: 'defect-report', label: '不具合報告' },

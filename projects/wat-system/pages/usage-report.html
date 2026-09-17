@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WaT System - 使用報告</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-active-key="usage-report">
+  <div class="app">
+    <aside class="sidebar">
+      <a href="/index.html" class="sidebar-logo">
+        <div class="logo-circle">W</div>
+        <div class="logo-text">WaT<br>System</div>
+      </a>
+      <a id="order-create-btn" class="btn-order-create"
+         href="/pages/placeholder.html?key=order-create&title=発注する">📦 発注する</a>
+      <ul id="sidebar-nav" class="sidebar-nav"></ul>
+    </aside>
+
+    <div class="main">
+      <header class="header">
+        <div class="header-user">
+          <span>👤</span>
+          <span id="header-user-name">窪田貴宏 様</span>
+          <a class="pill-btn" href="/pages/placeholder.html?key=user-settings&title=ユーザー設定">ユーザー設定</a>
+          <a class="pill-btn pill-btn-dark" href="/pages/placeholder.html?key=logout&title=ログアウト">ログアウト</a>
+        </div>
+      </header>
+
+      <main class="content">
+        <h1 class="page-title">使用報告</h1>
+
+        <div class="wizard-frame">
+          <div class="tabs">
+            <span class="tab tab-disabled">通常報告</span>
+            <span class="tab tab-active">置き在庫報告</span>
+          </div>
+
+          <!-- Step: entry -->
+          <section class="step" data-step="entry">
+            <label class="wizard-field">
+              <span>使用日</span>
+              <input type="date" id="in-date">
+            </label>
+            <label class="wizard-field">
+              <span>施設名</span>
+              <select id="in-facility">
+                <option value="B病院">B病院</option>
+              </select>
+            </label>
+            <div class="wizard-actions">
+              <button type="button" class="btn-primary btn-block" id="btn-entry-next">確認する</button>
+            </div>
+          </section>
+
+          <!-- Step: method -->
+          <section class="step" data-step="method" hidden>
+            <p class="step-lead">製品の入力方法を選択してください。</p>
+            <div class="wizard-actions wizard-actions-row">
+              <button type="button" class="btn-secondary btn-block" id="btn-method-list">📋 リストから選択</button>
+              <button type="button" class="btn-secondary btn-block" id="btn-method-scan">📷 スキャン</button>
+            </div>
+            <button type="button" class="link-back" data-back="entry">← 戻る</button>
+          </section>
+
+          <!-- Step: list (also used to render scan targets) -->
+          <section class="step" data-step="list" hidden>
+            <div id="list-filters" class="wizard-filter-row">
+              <label class="wizard-field">
+                <span>カテゴリ</span>
+                <select id="in-category">
+                  <option value="">すべて</option>
+                </select>
+              </label>
+              <label class="wizard-field">
+                <span>メーカー</span>
+                <select id="in-maker">
+                  <option value="">すべて</option>
+                </select>
+              </label>
+            </div>
+            <p class="step-lead" id="list-lead">対象製品を選択してください。</p>
+            <div id="product-cards" class="product-card-list"></div>
+            <button type="button" class="link-back" data-back="method">← 戻る</button>
+          </section>
+
+          <!-- Step: quantity -->
+          <section class="step" data-step="quantity" hidden>
+            <p class="step-lead">使用した数量を入力してください。</p>
+            <div class="selected-product-summary" id="qty-product-summary"></div>
+            <div class="qty-control">
+              <button type="button" class="qty-btn" id="btn-qty-minus">−</button>
+              <input type="number" id="in-qty" value="1" min="1">
+              <button type="button" class="qty-btn" id="btn-qty-plus">+</button>
+            </div>
+            <div class="wizard-actions">
+              <button type="button" class="btn-primary btn-block" id="btn-qty-next">次へ</button>
+            </div>
+            <button type="button" class="link-back" data-back="list">← 戻る</button>
+          </section>
+
+          <!-- Step: confirm -->
+          <section class="step" data-step="confirm" hidden>
+            <p class="step-lead">報告内容を確認してください。</p>
+            <div class="confirm-card">
+              <div class="confirm-row"><span>担当者名</span><strong id="cf-user"></strong></div>
+              <div class="confirm-row"><span>施設名</span><strong id="cf-facility"></strong></div>
+              <div class="confirm-row"><span>使用日</span><strong id="cf-date"></strong></div>
+              <hr>
+              <div class="confirm-row"><span>報告製品</span><strong id="cf-product"></strong></div>
+              <div class="confirm-line">滅 菌 期 限： <strong id="cf-sterile"></strong></div>
+              <div class="confirm-line">管 理 番 号： <strong id="cf-manage"></strong></div>
+              <div class="confirm-line confirm-line-new">
+                入 庫 先： <strong id="cf-origin"></strong>
+                <span class="new-badge">NEW</span>
+              </div>
+              <hr>
+              <div class="confirm-row"><span>数量</span><strong id="cf-qty"></strong></div>
+            </div>
+            <div class="wizard-actions">
+              <button type="button" class="btn-primary btn-block" id="btn-confirm-submit">確定する</button>
+            </div>
+            <button type="button" class="link-back" data-back="quantity">← 戻る</button>
+          </section>
+
+          <!-- Step: done -->
+          <section class="step" data-step="done" hidden>
+            <div class="done-box">
+              <p class="done-title">✅ 使用報告が完了しました</p>
+              <p class="done-note">登録された共有者へ使用報告書（PDF/Excel）をメールで送信しました。（デモ）</p>
+            </div>
+            <div class="wizard-actions">
+              <button type="button" class="btn-primary btn-block" id="btn-restart">もう一件報告する</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- F-5: facility choice bottom sheet -->
+  <div class="sheet-overlay" id="sheet-overlay" hidden>
+    <div class="sheet">
+      <h3 class="sheet-title">入庫先はどちらですか？</h3>
+      <p class="sheet-note">同一ロットで最初の入庫施設が異なる在庫が複数見つかりました。実際に持ち出した施設を選択してください。</p>
+      <div id="sheet-options" class="sheet-options"></div>
+      <button type="button" class="link-back" id="sheet-cancel">キャンセル</button>
+    </div>
+  </div>
+
+  <script src="/js/nav-data.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    // Mock stock data. Each row is one physical stock unit currently at `currentFacility`,
+    // carrying the `firstFacility` it was originally received at (F-1/F-3: carried through
+    // inventory moves without being overwritten).
+    const PRODUCT_STOCK = [
+      { id: 'st1', category: '循環器', maker: '日本メドトロニック', name: 'ペースメーカ用補修キット', partNo: '5873C', lot: '11111', serial: '-', manageNo: 'M-0001', sterileLimit: '2030/03/03', currentFacility: 'B病院', firstFacility: 'A病院', isSerialItem: false },
+      { id: 'st2', category: '循環器', maker: '日本メドトロニック', name: 'C315デリバリーカテーテル', partNo: 'C315H4002', lot: '77777', serial: 'S-201', manageNo: 'M-0002', sterileLimit: '2028/05/01', currentFacility: 'B病院', firstFacility: 'A病院', isSerialItem: false },
+      { id: 'st3', category: '循環器', maker: '日本メドトロニック', name: 'C315デリバリーカテーテル', partNo: 'C315H4002', lot: '77777', serial: 'S-305', manageNo: 'M-0003', sterileLimit: '2028/05/01', currentFacility: 'B病院', firstFacility: 'C病院', isSerialItem: false },
+      { id: 'st4', category: '消化器', maker: 'アボットメディカルジャパン', name: 'J型スタイレットキット', partNo: '6052-53', lot: '55555', serial: '-', manageNo: 'M-0004', sterileLimit: '2025/11/30', currentFacility: 'B病院', firstFacility: null, isSerialItem: false },
+      { id: 'st5', category: '消化器', maker: 'バイオトロニックジャパン', name: 'Solia S 45', partNo: '377176', lot: '-', serial: 'SN-88123', manageNo: 'M-0005', sterileLimit: '2029/09/10', currentFacility: 'B病院', firstFacility: 'A病院', isSerialItem: true },
+    ];
+
+    const state = {
+      date: '',
+      facility: 'B病院',
+      chosen: null,
+      qty: 1,
+    };
+
+    function goToStep(name) {
+      document.querySelectorAll('.step').forEach((el) => {
+        el.hidden = el.dataset.step !== name;
+      });
+    }
+
+    document.querySelectorAll('.link-back').forEach((btn) => {
+      if (btn.dataset.back) {
+        btn.addEventListener('click', () => goToStep(btn.dataset.back));
+      }
+    });
+
+    // Step: entry
+    document.getElementById('in-date').valueAsDate = new Date();
+    document.getElementById('btn-entry-next').addEventListener('click', () => {
+      state.date = document.getElementById('in-date').value;
+      state.facility = document.getElementById('in-facility').value;
+      goToStep('method');
+    });
+
+    // Step: method -> list
+    const categories = [...new Set(PRODUCT_STOCK.map((p) => p.category))];
+    const makers = [...new Set(PRODUCT_STOCK.map((p) => p.maker))];
+    document.getElementById('in-category').innerHTML += categories.map((c) => `<option value="${c}">${c}</option>`).join('');
+    document.getElementById('in-maker').innerHTML += makers.map((m) => `<option value="${m}">${m}</option>`).join('');
+
+    function renderProductList() {
+      const category = document.getElementById('in-category').value;
+      const maker = document.getElementById('in-maker').value;
+      const items = PRODUCT_STOCK.filter((p) => p.currentFacility === state.facility)
+        .filter((p) => !category || p.category === category)
+        .filter((p) => !maker || p.maker === maker);
+
+      // Group by lot + partNo so duplicate first-facility rows show as one selectable product.
+      const groups = new Map();
+      items.forEach((p) => {
+        const key = `${p.partNo}__${p.lot}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(p);
+      });
+
+      const cards = document.getElementById('product-cards');
+      cards.innerHTML = [...groups.values()].map((group) => {
+        const first = group[0];
+        return `
+          <button type="button" class="product-card" data-key="${first.partNo}__${first.lot}">
+            <div class="product-card-name">${first.name}</div>
+            <div class="product-card-meta">品番: ${first.partNo} / ロット: ${first.lot}</div>
+          </button>
+        `;
+      }).join('');
+
+      cards.querySelectorAll('.product-card').forEach((el) => {
+        el.addEventListener('click', () => selectProductGroup(groups.get(el.dataset.key)));
+      });
+    }
+
+    document.getElementById('in-category').addEventListener('change', renderProductList);
+    document.getElementById('in-maker').addEventListener('change', renderProductList);
+
+    document.getElementById('btn-method-list').addEventListener('click', () => {
+      document.getElementById('list-filters').hidden = false;
+      document.getElementById('list-lead').textContent = '対象製品を選択してください。';
+      renderProductList();
+      goToStep('list');
+    });
+
+    // Scan mode: skip category/maker filters, list every stocked item as a "scan target" (demo).
+    document.getElementById('btn-method-scan').addEventListener('click', () => {
+      document.getElementById('list-filters').hidden = true;
+      document.getElementById('list-lead').textContent = 'スキャンする製品を選択してください（デモ: バーコード読取の代わりにタップしてください）。';
+      const items = PRODUCT_STOCK.filter((p) => p.currentFacility === state.facility);
+      const groups = new Map();
+      items.forEach((p) => {
+        const key = `${p.partNo}__${p.lot}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(p);
+      });
+      const cards = document.getElementById('product-cards');
+      cards.innerHTML = [...groups.values()].map((group) => {
+        const first = group[0];
+        return `
+          <button type="button" class="product-card" data-key="${first.partNo}__${first.lot}">
+            <div class="product-card-name">📷 ${first.name}</div>
+            <div class="product-card-meta">品番: ${first.partNo} / ロット: ${first.lot}</div>
+          </button>
+        `;
+      }).join('');
+      cards.querySelectorAll('.product-card').forEach((el) => {
+        el.addEventListener('click', () => selectProductGroup(groups.get(el.dataset.key)));
+      });
+      goToStep('list');
+    });
+
+    // F-4 / F-5: resolve the first-received facility for the chosen product group.
+    function selectProductGroup(group) {
+      const distinctFacilities = new Set(group.map((p) => p.firstFacility));
+      if (!group[0].isSerialItem && group.length > 1 && distinctFacilities.size > 1) {
+        openFacilitySheet(group);
+      } else {
+        chooseFinal(group[0]);
+      }
+    }
+
+    function openFacilitySheet(candidates) {
+      const options = document.getElementById('sheet-options');
+      options.innerHTML = candidates.map((c, i) => `
+        <button type="button" class="sheet-option" data-index="${i}">
+          <div class="sheet-option-facility">${c.firstFacility || '不明（未登録）'}</div>
+          <div class="sheet-option-meta">シリアル: ${c.serial} / 管理番号: ${c.manageNo}</div>
+        </button>
+      `).join('');
+      options.querySelectorAll('.sheet-option').forEach((el) => {
+        el.addEventListener('click', () => {
+          closeFacilitySheet();
+          chooseFinal(candidates[Number(el.dataset.index)]);
+        });
+      });
+      document.getElementById('sheet-overlay').hidden = false;
+    }
+
+    function closeFacilitySheet() {
+      document.getElementById('sheet-overlay').hidden = true;
+    }
+
+    document.getElementById('sheet-cancel').addEventListener('click', closeFacilitySheet);
+
+    function chooseFinal(product) {
+      state.chosen = product;
+      document.getElementById('qty-product-summary').innerHTML = `
+        <div class="product-card-name">${product.name}</div>
+        <div class="product-card-meta">品番: ${product.partNo} / ロット: ${product.lot}</div>
+      `;
+      state.qty = 1;
+      document.getElementById('in-qty').value = 1;
+      goToStep('quantity');
+    }
+
+    // Step: quantity
+    document.getElementById('btn-qty-minus').addEventListener('click', () => {
+      const input = document.getElementById('in-qty');
+      input.value = Math.max(1, Number(input.value) - 1);
+    });
+    document.getElementById('btn-qty-plus').addEventListener('click', () => {
+      const input = document.getElementById('in-qty');
+      input.value = Number(input.value) + 1;
+    });
+
+    document.getElementById('btn-qty-next').addEventListener('click', () => {
+      state.qty = Number(document.getElementById('in-qty').value) || 1;
+      renderConfirm();
+      goToStep('confirm');
+    });
+
+    function renderConfirm() {
+      const p = state.chosen;
+      document.getElementById('cf-user').textContent = '窪田貴宏';
+      document.getElementById('cf-facility').textContent = state.facility;
+      document.getElementById('cf-date').textContent = state.date;
+      document.getElementById('cf-product').textContent = `${p.name}（${p.partNo}）`;
+      document.getElementById('cf-sterile').textContent = p.sterileLimit;
+      document.getElementById('cf-manage').textContent = p.manageNo;
+      // F-6: show the first-received facility, blank when not found in master (F-4 "not found" case).
+      document.getElementById('cf-origin').textContent = p.firstFacility || '（マスタ未登録のため空欄）';
+      document.getElementById('cf-qty').textContent = state.qty;
+    }
+
+    document.getElementById('btn-confirm-submit').addEventListener('click', () => {
+      goToStep('done');
+    });
+
+    document.getElementById('btn-restart').addEventListener('click', () => {
+      state.chosen = null;
+      goToStep('entry');
+    });
+  </script>
+</body>
+</html>
