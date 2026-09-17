@@ -209,3 +209,143 @@ body {
   border-radius: 8px;
   background: #fff;
 }
+
+/* Filter panel (search / report screens) */
+.filter-panel {
+  max-width: 900px;
+  margin: 0 auto 28px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 20px 24px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px 20px;
+  margin-bottom: 16px;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #555;
+}
+
+.filter-field input[type="text"] {
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #555;
+  margin-right: auto;
+}
+
+.btn-primary,
+.btn-secondary {
+  border: none;
+  border-radius: 4px;
+  padding: 9px 20px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent-dark);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark-hover);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--accent-dark);
+  border: 1px solid var(--card-border);
+}
+
+.btn-secondary:hover {
+  background: #f0faff;
+}
+
+/* Report table */
+.report-section {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.report-header .section-title {
+  margin-bottom: 0;
+}
+
+#result-count {
+  font-weight: normal;
+  font-size: 13px;
+  color: #888;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.report-table th,
+.report-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eef4f7;
+  text-align: left;
+}
+
+.report-table th {
+  background: var(--accent-teal);
+  color: #fff;
+  position: sticky;
+  top: 0;
+}
+
+.report-table tbody tr:hover {
+  background: #f6fcfb;
+}
+
+.report-table tr.row-alert {
+  background: #fde8e8;
+}
+
+.report-table tr.row-alert:hover {
+  background: #fbd7d7;
+}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WaT System - 在庫レポート</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-active-key="inventory-search">
+  <div class="app">
+    <aside class="sidebar">
+      <a href="/index.html" class="sidebar-logo">
+        <div class="logo-circle">W</div>
+        <div class="logo-text">WaT<br>System</div>
+      </a>
+      <a id="order-create-btn" class="btn-order-create"
+         href="/pages/placeholder.html?key=order-create&title=発注する">📦 発注する</a>
+      <ul id="sidebar-nav" class="sidebar-nav"></ul>
+    </aside>
+
+    <div class="main">
+      <header class="header">
+        <div class="header-user">
+          <span>👤</span>
+          <span id="header-user-name">窪田貴宏 様</span>
+          <a class="pill-btn" href="/pages/placeholder.html?key=user-settings&title=ユーザー設定">ユーザー設定</a>
+          <a class="pill-btn pill-btn-dark" href="/pages/placeholder.html?key=logout&title=ログアウト">ログアウト</a>
+        </div>
+      </header>
+
+      <main class="content">
+        <h1 class="page-title">在庫レポート</h1>
+
+        <section class="filter-panel">
+          <div class="filter-grid">
+            <label class="filter-field">
+              <span>製品保管(場所)</span>
+              <input type="text" id="f-location" placeholder="例: A病院">
+            </label>
+            <label class="filter-field">
+              <span>メーカー名</span>
+              <input type="text" id="f-maker" placeholder="例: 日本メドトロニック">
+            </label>
+            <label class="filter-field">
+              <span>製品名</span>
+              <input type="text" id="f-product" placeholder="例: ペースメーカ用補修キット">
+            </label>
+            <label class="filter-field">
+              <span>品番</span>
+              <input type="text" id="f-code" placeholder="例: 5873C">
+            </label>
+          </div>
+          <div class="filter-actions">
+            <label class="filter-checkbox">
+              <input type="checkbox" id="f-alert-only">
+              アラートのみ表示
+            </label>
+            <button type="button" class="btn-secondary" id="btn-reset">リセットする</button>
+            <button type="button" class="btn-primary" id="btn-search">条件で絞り込み</button>
+          </div>
+        </section>
+
+        <section class="report-section">
+          <div class="report-header">
+            <h2 class="section-title">一覧 <span id="result-count"></span></h2>
+            <button type="button" class="btn-secondary" id="btn-excel">📄 Excel出力</button>
+          </div>
+          <div class="table-wrap">
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>所有者名</th>
+                  <th>会社名</th>
+                  <th>バッグ名</th>
+                  <th>倉庫名</th>
+                  <th>管理番号</th>
+                  <th>メーカー</th>
+                  <th>商品</th>
+                  <th>品番</th>
+                  <th>単位</th>
+                  <th>ロット</th>
+                  <th>シリアル</th>
+                  <th>有効期限</th>
+                  <th>買取区分</th>
+                  <th>数量</th>
+                </tr>
+              </thead>
+              <tbody id="report-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/nav-data.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const STOCK_ROWS = [
+      { owner: '代理店ワットシー', company: '代理店ワットシー', bag: '', warehouse: 'A病院', code: '', maker: '日本メドトロニック', product: 'ペースメーカ用補修キット', partNo: '5873C', unit: '個', lot: '11111', serial: '', ubd: '2030/03/03', buyType: '買取', qty: 3, alert: false },
+      { owner: '代理店ワットシー', company: '代理店ワットシー', bag: '', warehouse: 'A病院', code: '', maker: '日本メドトロニック', product: 'C315デリバリーカテーテル', partNo: 'C315H4002', unit: '本', lot: '11111', serial: '', ubd: '2030/03/03', buyType: '買取', qty: 6, alert: false },
+      { owner: '代理店ワットシー', company: '代理店ワットシー', bag: '', warehouse: 'A病院', code: '', maker: '日本メドトロニック', product: 'ペースメーカ用補修キット', partNo: '5873C', unit: '個', lot: '11112', serial: '', ubd: '2026/08/10', buyType: '買取', qty: 1, alert: false },
+      { owner: '代理店ワットシー', company: '代理店ワットシー', bag: '', warehouse: 'D病院', code: '', maker: '日本メドトロニック', product: 'J型スタイレットキット プラントチップ', partNo: '6052-53', unit: '個', lot: '-', serial: '123j1', ubd: '2025/11/30', buyType: '買取', qty: 1, alert: true },
+    ];
+
+    function normalize(row, key) {
+      const map = {
+        location: row.warehouse,
+        maker: row.maker,
+        product: row.product,
+        code: row.partNo,
+      };
+      return (map[key] || '').toString();
+    }
+
+    function render() {
+      const location = document.getElementById('f-location').value.trim();
+      const maker = document.getElementById('f-maker').value.trim();
+      const product = document.getElementById('f-product').value.trim();
+      const code = document.getElementById('f-code').value.trim();
+      const alertOnly = document.getElementById('f-alert-only').checked;
+
+      const filtered = STOCK_ROWS.filter((row) => {
+        if (location && !normalize(row, 'location').includes(location)) return false;
+        if (maker && !normalize(row, 'maker').includes(maker)) return false;
+        if (product && !normalize(row, 'product').includes(product)) return false;
+        if (code && !normalize(row, 'code').includes(code)) return false;
+        if (alertOnly && !row.alert) return false;
+        return true;
+      });
+
+      const tbody = document.getElementById('report-body');
+      tbody.innerHTML = filtered.map((row) => `
+        <tr class="${row.alert ? 'row-alert' : ''}">
+          <td>${row.owner}</td>
+          <td>${row.company}</td>
+          <td>${row.bag}</td>
+          <td>${row.warehouse}</td>
+          <td>${row.code}</td>
+          <td>${row.maker}</td>
+          <td>${row.product}</td>
+          <td>${row.partNo}</td>
+          <td>${row.unit}</td>
+          <td>${row.lot}</td>
+          <td>${row.serial}</td>
+          <td>${row.ubd}</td>
+          <td>${row.buyType}</td>
+          <td>${row.qty}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('result-count').textContent = `(${filtered.length}件)`;
+    }
+
+    document.getElementById('btn-search').addEventListener('click', render);
+    document.getElementById('f-alert-only').addEventListener('change', render);
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      document.getElementById('f-location').value = '';
+      document.getElementById('f-maker').value = '';
+      document.getElementById('f-product').value = '';
+      document.getElementById('f-code').value = '';
+      document.getElementById('f-alert-only').checked = false;
+      render();
+    });
+    document.getElementById('btn-excel').addEventListener('click', () => {
+      alert('Excel出力は準備中です。');
+    });
+
+    render();
+  </script>
+</body>
+</html>
